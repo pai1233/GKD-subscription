@@ -1,7 +1,11 @@
 name: Upstream Sync
 
-permissions:
-  contents: write
+on:
+  push:
+    branches:
+      - '**'
+
+permissions: write-all
 
 jobs:
   sync_latest_from_upstream:
