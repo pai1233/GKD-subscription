@@ -1,0 +1,33 @@
+name: Upstream Sync
+
+permissions:
+  contents: write
+
+#on:
+#  schedule:
+#    - cron: "0 0 * * *" # every day
+#  workflow_dispatch:
+
+jobs:
+  sync_latest_from_upstream:
+    name: Sync latest commits from upstream repo
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+		    run: |
+		      git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Download remote ganlinte JSON
+    		run: |
+    		  echo "[info] 下载ganlinte订阅数据"
+    	    curl -L -o ganlinte-gkd.json "https://raw.githubusercontent.com/ganlinte/GKD-subscription/main/dist/ganlin_gkd.json5"
+          git add ganlinte-gkd.json
+          git diff --cached --quiet || git commit -m "auto-update ganlinte-gkd.json"	  
+
+      - name: Sync check
+        run: |
+          echo "[info] 同步数据"
+		      git push
+          exit 1
